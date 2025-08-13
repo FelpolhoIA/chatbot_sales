@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Chatbot de Vendas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #chat { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; margin-bottom: 10px; }
+        .msg { margin-bottom: 10px; }
+        .user { color: blue; }
+        .bot { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Chatbot de Vendas</h1>
+    <div id="chat"></div>
+    <input type="text" id="input" placeholder="Digite sua pergunta..." style="width: 80%;" />
+    <button onclick="sendMessage()">Enviar</button>
+
+    <script>
+        async function loadHistory() {
+            const res = await fetch('/history');
+            const data = await res.json();
+            const chatDiv = document.getElementById('chat');
+            chatDiv.innerHTML = '';
+            data.forEach(item => {
+                chatDiv.innerHTML += `<div class="msg user"><b>Você:</b> ${item.user_message}</div>`;
+                chatDiv.innerHTML += `<div class="msg bot"><b>Bot:</b> ${item.bot_response}</div>`;
+            });
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('input');
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            const chatDiv = document.getElementById('chat');
+            chatDiv.innerHTML += `<div class="msg user"><b>Você:</b> ${text}</div>`;
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+
+            const res = await fetch('/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: text})
+            });
+            const data = await res.json();
+            chatDiv.innerHTML += `<div class="msg bot"><b>Bot:</b> ${data.response}</div>`;
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        }
+
+        window.onload = loadHistory;
+    </script>
+</body>
+</html>
