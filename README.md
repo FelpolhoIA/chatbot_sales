@@ -25,7 +25,7 @@ Um chatbot de vendas construído com **FastAPI**, **LangChain**, e **OpenAI**, q
 
 1. Clone o repositório:
 
-```bash
+
 git clone https://github.com/FelpolhoIA/chatbot_sales.git
 cd chatbot_sales
 
@@ -40,7 +40,7 @@ pip install -r requirements.txt
 ## Execução com Dockerfile
 
 1. **Construir a imagem:**
-```bash
+
 docker build -t chatbot_sales
 
 2. **Rodar Container:**
